@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+
+# 部署脚本后产生的本地产物（不入库）
+tmp/
+game/
+preview.html
+prompts.md
+vocal_test.html
+verify_report.json
+*.ogg
+*.mp3
+*.wav
