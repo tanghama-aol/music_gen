@@ -1,0 +1,64 @@
+{
+  "file": "music/game/public/assets/music/test_vocal_xipi.ogg",
+  "probe": {
+    "codec": "vorbis",
+    "sr": 44100,
+    "ch": 2,
+    "dur": 86.60034
+  },
+  "lufs": -15.99,
+  "peak_db": -4.57,
+  "seam": 0.4,
+  "loop_seconds": 86.6,
+  "loop_boundary_seconds": 86.6,
+  "structure": "A 器乐 → B 唱腔 → A 器乐（各段 2s 等功率交叉淡化）",
+  "segments": [
+    31.08,
+    31.12
+  ],
+  "declick_fixes": 11,
+  "ab_inst": {
+    "band14": 0.3635,
+    "syll": 0.2177,
+    "upper": 0.0168
+  },
+  "ab_vocal": {
+    "band14": 0.2851,
+    "syll": 0.0264,
+    "upper": 0.0641
+  },
+  "band_gain": -0.0784,
+  "syll_gain": -0.1913,
+  "upper_gain": 0.0473,
+  "waveform_correlation": 0.0188,
+  "quarters": [
+    {
+      "band14": 0.3465,
+      "syll": 0.2369,
+      "upper": 0.0164,
+      "quarter": "Q1 0-25%"
+    },
+    {
+      "band14": 0.3168,
+      "syll": 0.1453,
+      "upper": 0.0393,
+      "quarter": "Q2 25-50%"
+    },
+    {
+      "band14": 0.3169,
+      "syll": 0.0559,
+      "upper": 0.0557,
+      "quarter": "Q3 50-75%"
+    },
+    {
+      "band14": 0.362,
+      "syll": 0.1645,
+      "upper": 0.0128,
+      "quarter": "Q4 75-100%"
+    }
+  ],
+  "vocal_peak_quarter": "Q3 50-75%",
+  "contract_pass": true,
+  "vocal_hint": true,
+  "partial_hint": true
+}

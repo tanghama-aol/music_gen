@@ -1,0 +1,94 @@
+{
+  "music": [
+    {
+      "name": "西皮流水（京剧）",
+      "calm": "music/xipiliushui_calm.ogg",
+      "fight": "music/xipiliushui_fight.ogg",
+      "loop": [
+        0,
+        74.16
+      ]
+    },
+    {
+      "name": "秦腔苦音（秦腔）",
+      "calm": "music/qinqiang_calm.ogg",
+      "fight": "music/qinqiang_fight.ogg",
+      "loop": [
+        0,
+        71.5
+      ]
+    },
+    {
+      "name": "花鼓小调（花鼓戏）",
+      "calm": "music/huagu_calm.ogg",
+      "fight": "music/huagu_fight.ogg",
+      "loop": [
+        0,
+        73.28
+      ]
+    },
+    {
+      "name": "黄梅采茶（黄梅戏）",
+      "calm": "music/huangmei_calm.ogg",
+      "fight": "music/huangmei_fight.ogg",
+      "loop": [
+        0,
+        73.26
+      ]
+    },
+    {
+      "name": "川江号子（四川民谣）",
+      "calm": "music/chuanjiang_calm.ogg",
+      "fight": "music/chuanjiang_fight.ogg",
+      "loop": [
+        0,
+        74.32
+      ]
+    },
+    {
+      "name": "洞庭渔歌（湖南民谣）",
+      "calm": "music/dongting_calm.ogg",
+      "fight": "music/dongting_fight.ogg",
+      "loop": [
+        0,
+        70.98
+      ]
+    },
+    {
+      "name": "闽南采茶（福建民谣）",
+      "calm": "music/minnan_calm.ogg",
+      "fight": "music/minnan_fight.ogg",
+      "loop": [
+        0,
+        69.81
+      ]
+    },
+    {
+      "name": "信天游（陕北）",
+      "calm": "music/xintianyou_calm.ogg",
+      "fight": "music/xintianyou_fight.ogg",
+      "loop": [
+        0,
+        71.84
+      ]
+    },
+    {
+      "name": "江南小调（江南）",
+      "calm": "music/jiangnan_calm.ogg",
+      "fight": "music/jiangnan_fight.ogg",
+      "loop": [
+        0,
+        66.76
+      ]
+    },
+    {
+      "name": "二人转（东北）",
+      "calm": "music/errenzhuan_calm.ogg",
+      "fight": "music/errenzhuan_fight.ogg",
+      "loop": [
+        0,
+        72.74
+      ]
+    }
+  ]
+}

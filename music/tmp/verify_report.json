@@ -1,0 +1,342 @@
+[
+  {
+    "name": "西皮流水（京剧）",
+    "loop": 74.16,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 74.16
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 74.16
+    },
+    "lufs": [
+      -16.0,
+      -16.02
+    ],
+    "calm_feat": {
+      "onset": 194.2,
+      "flux": 0.02481,
+      "peak_db": -2.7,
+      "seam": 0.47
+    },
+    "fight_feat": {
+      "onset": 174.8,
+      "flux": 0.01885,
+      "peak_db": -4.13,
+      "seam": 2.69
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "秦腔苦音（秦腔）",
+    "loop": 71.5,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 71.5
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 71.5
+    },
+    "lufs": [
+      -16.04,
+      -16.0
+    ],
+    "calm_feat": {
+      "onset": 114.1,
+      "flux": 0.01652,
+      "peak_db": -1.47,
+      "seam": 0.01
+    },
+    "fight_feat": {
+      "onset": 189.7,
+      "flux": 0.02121,
+      "peak_db": -2.83,
+      "seam": 2.15
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "花鼓小调（花鼓戏）",
+    "loop": 73.28,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 73.28
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 73.28
+    },
+    "lufs": [
+      -15.99,
+      -16.0
+    ],
+    "calm_feat": {
+      "onset": 117.9,
+      "flux": 0.01791,
+      "peak_db": -2.14,
+      "seam": 0.35
+    },
+    "fight_feat": {
+      "onset": 193.2,
+      "flux": 0.02277,
+      "peak_db": -2.18,
+      "seam": 0.0
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "黄梅采茶（黄梅戏）",
+    "loop": 73.26,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 73.26
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 73.26
+    },
+    "lufs": [
+      -15.97,
+      -15.99
+    ],
+    "calm_feat": {
+      "onset": 181.0,
+      "flux": 0.00926,
+      "peak_db": -3.32,
+      "seam": 0.12
+    },
+    "fight_feat": {
+      "onset": 151.5,
+      "flux": 0.02129,
+      "peak_db": -2.84,
+      "seam": 0.0
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "川江号子（四川民谣）",
+    "loop": 74.32,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 74.32
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 74.32
+    },
+    "lufs": [
+      -16.01,
+      -16.02
+    ],
+    "calm_feat": {
+      "onset": 138.9,
+      "flux": 0.02825,
+      "peak_db": -1.85,
+      "seam": 3.86
+    },
+    "fight_feat": {
+      "onset": 238.2,
+      "flux": 0.03677,
+      "peak_db": -2.88,
+      "seam": 1.52
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "洞庭渔歌（湖南民谣）",
+    "loop": 70.98,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 70.98
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 70.98
+    },
+    "lufs": [
+      -15.99,
+      -16.03
+    ],
+    "calm_feat": {
+      "onset": 147.9,
+      "flux": 0.01751,
+      "peak_db": -2.98,
+      "seam": 0.07
+    },
+    "fight_feat": {
+      "onset": 184.3,
+      "flux": 0.02272,
+      "peak_db": -3.52,
+      "seam": 3.08
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "闽南采茶（福建民谣）",
+    "loop": 69.81,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 69.81
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 69.81
+    },
+    "lufs": [
+      -16.02,
+      -16.01
+    ],
+    "calm_feat": {
+      "onset": 146.1,
+      "flux": 0.02215,
+      "peak_db": -1.83,
+      "seam": 0.93
+    },
+    "fight_feat": {
+      "onset": 193.4,
+      "flux": 0.02667,
+      "peak_db": -1.19,
+      "seam": 0.15
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "信天游（陕北）",
+    "loop": 71.84,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 71.84
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 71.84
+    },
+    "lufs": [
+      -15.99,
+      -16.02
+    ],
+    "calm_feat": {
+      "onset": 125.3,
+      "flux": 0.01834,
+      "peak_db": -2.2,
+      "seam": 0.03
+    },
+    "fight_feat": {
+      "onset": 194.6,
+      "flux": 0.03353,
+      "peak_db": -2.78,
+      "seam": 0.1
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "江南小调（江南）",
+    "loop": 66.76,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 66.76
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 66.76
+    },
+    "lufs": [
+      -16.08,
+      -15.98
+    ],
+    "calm_feat": {
+      "onset": 130.3,
+      "flux": 0.01372,
+      "peak_db": -1.33,
+      "seam": 0.03
+    },
+    "fight_feat": {
+      "onset": 147.4,
+      "flux": 0.01093,
+      "peak_db": -2.22,
+      "seam": 0.45
+    },
+    "pass_": true,
+    "has_fight": true
+  },
+  {
+    "name": "二人转（东北）",
+    "loop": 72.74,
+    "calm": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 72.74
+    },
+    "fight": {
+      "codec": "vorbis",
+      "sr": 44100,
+      "ch": 2,
+      "dur": 72.74
+    },
+    "lufs": [
+      -16.01,
+      -16.03
+    ],
+    "calm_feat": {
+      "onset": 174.9,
+      "flux": 0.0244,
+      "peak_db": -1.78,
+      "seam": 0.57
+    },
+    "fight_feat": {
+      "onset": 185.6,
+      "flux": 0.02712,
+      "peak_db": -2.94,
+      "seam": 0.73
+    },
+    "pass_": true,
+    "has_fight": true
+  }
+]

@@ -72,7 +72,11 @@ python -m http.server 8765 --bind 127.0.0.1    # 打开 preview.html，file:// �
 
 ## 目录结构
 
+仓库分两部分：根目录是**可直接安装的 skill**，`music/` 是**实跑管线的真源与成品资产**。
+两者脚本同源；`scripts/` 是便携快照，`music/` 还额外含诊断脚本、提示词、试听页和已生成的 OGG。
+
 ```
+音乐.md                          原始配乐规格文档（10 首风格、清单 schema、响度规范）
 SKILL.md                        触发条件 + 6 步工作流 + 命令速查
 scripts/
   bootstrap.py                 环境自检 / 部署 / 反向同步
@@ -90,7 +94,21 @@ references/
   troubleshooting.md           超时 / 配额 / 削波 / 接缝 / 静音尾的恢复手法
   case-study.md                10 首 × 2 层完整实跑记录
 dist/game-bgm-generation.zip   可直接安装的打包版本
+music/
+  README.md                    完整实跑记录（契约对照、提示词改版实测、历史坑）
+  *.py                         8 个管线脚本 + 8 个 probe_* 诊断脚本
+  prompts.md / preview.html    10 首中英文提示词 / 双层叠放试听页
+  vocal_test.html              人声唱腔测试曲 A/B 对照页
+  local_src/                   第三方 Space 的 app.py 参考快照（用于反推接口参数）
+  game/public/assets/
+    manifest.json              10 首正式曲目的清单与循环点
+    music/*.ogg                20 个正式层 + 1 个测试曲（共 23 个，约 27 MB）
+  tmp/*.json, tmp/spec4k_*.png 验收报告与人声对照频谱图
 ```
+
+`tmp/` 里 148 个 wav / 51 个 mp3 / 各类日志是 1.6 GB 的推理中间缓存，**未入库**；
+用管线重新生成即可。`music/README.md` §7 记录了最终 10 首的循环点，
+`music/tmp/verify_report.json` 是 `verify_music.py` 的 10/10 通过明细。
 
 ## 模型后端
 

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>配乐试听 · 音乐.md</title>
+<style>
+:root{--bg:#111318;--panel:#191c23;--line:#2a2f3a;--txt:#e8eaf0;--dim:#8b93a5;--acc:#e0a35a;--acc2:#6ea8d8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;padding:28px}
+h1{font-size:20px;margin:0 0 4px}p.sub{color:var(--dim);margin:0 0 22px;font-size:13px}
+.wrap{max-width:960px;margin:auto}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.no{color:var(--acc);font-weight:700;font-size:13px}.name{font-size:16px;font-weight:600}.opera{color:var(--dim);font-size:12px;border:1px solid var(--line);padding:1px 8px;border-radius:10px}
+.meta{color:var(--dim);font-size:12px;margin:6px 0 12px}
+.ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+button{background:#232833;color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:6px 13px;cursor:pointer;font-size:13px}
+button:hover{border-color:var(--acc);color:var(--acc)}button.on{background:var(--acc);color:#15171c;border-color:var(--acc);font-weight:600}
+input[type=range]{width:190px;accent-color:var(--acc)}
+.lab{color:var(--dim);font-size:12px;min-width:74px}
+.note{color:var(--dim);font-size:12px;margin-top:10px}
+.note summary{cursor:pointer;color:var(--acc2)}.note summary:hover{color:var(--acc)}
+.note div{margin-top:8px;line-height:1.7}.note b{color:var(--txt);font-weight:600}
+.warn{background:#251e18;border:1px solid #4a3a26;color:#e8c99a;border-radius:8px;padding:10px 13px;font-size:12px;margin-bottom:18px}
+.empty{color:var(--dim);font-size:12px}
+</style></head><body><div class="wrap">
+<h1>配乐试听</h1>
+<p class="sub">按《音乐.md》生成 · ACE-Step 音乐大模型 · calm / fight 双层叠放试听 · <span id="stat"></span></p>
+<div class="warn">拖动滑块模拟游戏里的「平滑切换音量」：0 = 只放平静层（舒缓无鼓点），1 = 只放交战层（紧张、锣鼓在前景）。两层的每个片段都用同一 seed + 同一 BPM + 同一时长生成，结构、调式与循环点完全一致，可任意时刻平滑叠放。</div>
+<div id="list"></div>
+</div>
+<script>
+const TRACKS = [
+  {
+    "no": 1,
+    "name": "西皮流水",
+    "opera": "京剧",
+    "key": "D 徵调",
+    "bpm": 98,
+    "lead": "京胡 / 京胡",
+    "pluck": "琵琶",
+    "loop": 74.16,
+    "calm": "game/public/assets/music/xipiliushui_calm.ogg",
+    "fight": "game/public/assets/music/xipiliushui_fight.ogg",
+    "prompt": "京剧西皮流水过门，京胡领奏，节奏明快，D 徵调。游戏配乐BGM，D 徵调，约 98 BPM，主奏京胡 / 京胡，弹拨琵琶，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "京剧西皮流水过门，京胡领奏，节奏明快，D 徵调。游戏配乐BGM，D 徵调，约 98 BPM，主奏京胡 / 京胡，弹拨琵琶，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "京剧西皮流水过门，京胡领奏，板鼓与大锣小锣点子紧密，节奏明快，D 徵调，带戏曲锣鼓经「急急风」气质。游戏配乐BGM，D 徵调，约 98 BPM，主奏京胡 / 京胡，弹拨琵琶，纯器乐无人声，打击乐板鼓、大锣、小锣、钹（急急风），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 2,
+    "name": "秦腔苦音",
+    "opera": "秦腔",
+    "key": "A 苦音",
+    "bpm": 80,
+    "lead": "板胡 / 唢呐",
+    "pluck": "三弦",
+    "loop": 71.5,
+    "calm": "game/public/assets/music/qinqiang_calm.ogg",
+    "fight": "game/public/assets/music/qinqiang_fight.ogg",
+    "prompt": "秦腔苦音，板胡高亢苍凉领奏，唢呐助阵，节奏如黄土高原上的呐喊，A 调带升四降七的苦音色彩。游戏配乐BGM，A 苦音，约 80 BPM，主奏板胡 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "秦腔苦音，板胡高亢苍凉领奏，唢呐助阵，节奏如黄土高原上的呐喊，A 调带升四降七的苦音色彩。游戏配乐BGM，A 苦音，约 80 BPM，主奏板胡 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "秦腔苦音，板胡高亢苍凉领奏，唢呐助阵，大鼓与大锣沉重有力，节奏如黄土高原上的呐喊，A 调带升四降七的苦音色彩。游戏配乐BGM，A 苦音，约 80 BPM，主奏板胡 / 唢呐，弹拨三弦，纯器乐无人声，打击乐大鼓、大锣、梆子，紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 3,
+    "name": "花鼓小调",
+    "opera": "花鼓戏",
+    "key": "B 宫五声",
+    "bpm": 106,
+    "lead": "竹笛 / 唢呐",
+    "pluck": "三弦",
+    "loop": 73.28,
+    "calm": "game/public/assets/music/huagu_calm.ogg",
+    "fight": "game/public/assets/music/huagu_fight.ogg",
+    "prompt": "欢快俏皮，竹笛与唢呐问答，带轻微摇摆的节奏，B 宫五声调。游戏配乐BGM，B 宫五声，约 106 BPM，主奏竹笛 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "欢快俏皮，竹笛与唢呐问答，带轻微摇摆的节奏，B 宫五声调。游戏配乐BGM，B 宫五声，约 106 BPM，主奏竹笛 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "湖南花鼓戏小调，欢快俏皮，竹笛与唢呐问答，小锣木鱼点缀，带轻微摇摆的节奏，B 宫五声调。游戏配乐BGM，B 宫五声，约 106 BPM，主奏竹笛 / 唢呐，弹拨三弦，纯器乐无人声，打击乐小锣、木鱼（带摇摆），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 4,
+    "name": "黄梅采茶",
+    "opera": "黄梅戏",
+    "key": "G 大调七声",
+    "bpm": 78,
+    "lead": "二胡 / 竹笛",
+    "pluck": "古筝",
+    "loop": 73.26,
+    "calm": "game/public/assets/music/huangmei_calm.ogg",
+    "fight": "game/public/assets/music/huangmei_fight.ogg",
+    "prompt": "安徽黄梅戏，二胡抒情领奏，竹笛和古筝伴奏，节奏舒缓委婉，如《打猪草》般清新，G 大调七声音阶。游戏配乐BGM，G 大调七声，约 78 BPM，主奏二胡 / 竹笛，弹拨古筝，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "安徽黄梅戏，二胡抒情领奏，竹笛和古筝伴奏，节奏舒缓委婉，如《打猪草》般清新，G 大调七声音阶。游戏配乐BGM，G 大调七声，约 78 BPM，主奏二胡 / 竹笛，弹拨古筝，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "安徽黄梅戏，二胡抒情领奏，竹笛和古筝伴奏，节奏舒缓委婉，如《打猪草》般清新，G 大调七声音阶。游戏配乐BGM，G 大调七声，约 78 BPM，主奏二胡 / 竹笛，弹拨古筝，纯器乐无人声，打击乐板鼓、小锣，紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 5,
+    "name": "川江号子",
+    "opera": "四川民谣",
+    "key": "G 宫五声",
+    "bpm": 94,
+    "lead": "竹笛 / 唢呐",
+    "pluck": "三弦",
+    "loop": 74.32,
+    "calm": "game/public/assets/music/chuanjiang_calm.ogg",
+    "fight": "game/public/assets/music/chuanjiang_fight.ogg",
+    "prompt": "四川民谣，竹笛与三弦弹拨，节奏带明显摇摆，川江号子般的呼应感，轻松诙谐，G 宫五声调。游戏配乐BGM，G 宫五声，约 94 BPM，主奏竹笛 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "四川民谣，竹笛与三弦弹拨，节奏带明显摇摆，川江号子般的呼应感，轻松诙谐，G 宫五声调。游戏配乐BGM，G 宫五声，约 94 BPM，主奏竹笛 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "四川民谣，竹笛与三弦弹拨，节奏带明显摇摆，川江号子般的呼应感，轻松诙谐，G 宫五声调。游戏配乐BGM，G 宫五声，约 94 BPM，主奏竹笛 / 唢呐，弹拨三弦，纯器乐无人声，打击乐大鼓、梆子（明显摇摆），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 6,
+    "name": "洞庭渔歌",
+    "opera": "湖南民谣",
+    "key": "E 徵调",
+    "bpm": 70,
+    "lead": "二胡 / 唢呐",
+    "pluck": "古筝",
+    "loop": 70.98,
+    "calm": "game/public/assets/music/dongting_calm.ogg",
+    "fight": "game/public/assets/music/dongting_fight.ogg",
+    "prompt": "湖南民谣，如《浏阳河》般悠长宽广，二胡与古筝，徵调，带江水般流动的分解和弦，E 徵调。游戏配乐BGM，E 徵调，约 70 BPM，主奏二胡 / 唢呐，弹拨古筝，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "湖南民谣，如《浏阳河》般悠长宽广，二胡与古筝，徵调，带江水般流动的分解和弦，E 徵调。游戏配乐BGM，E 徵调，约 70 BPM，主奏二胡 / 唢呐，弹拨古筝，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "湖南民谣，如《浏阳河》般悠长宽广，二胡与古筝，徵调，鼓点沉稳，带江水般流动的分解和弦，E 徵调。游戏配乐BGM，E 徵调，约 70 BPM，主奏二胡 / 唢呐，弹拨古筝，纯器乐无人声，打击乐大鼓、大锣（沉稳），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 7,
+    "name": "闽南采茶",
+    "opera": "福建民谣",
+    "key": "A 羽调",
+    "bpm": 82,
+    "lead": "竹笛 / 二胡",
+    "pluck": "琵琶",
+    "loop": 69.81,
+    "calm": "game/public/assets/music/minnan_calm.ogg",
+    "fight": "game/public/assets/music/minnan_fight.ogg",
+    "prompt": "福建闽南民谣，琵琶轮指与竹笛，如《采茶舞曲》般灵动，羽调，A 羽调。游戏配乐BGM，A 羽调，约 82 BPM，主奏竹笛 / 二胡，弹拨琵琶，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "福建闽南民谣，琵琶轮指与竹笛，如《采茶舞曲》般灵动，羽调，A 羽调。游戏配乐BGM，A 羽调，约 82 BPM，主奏竹笛 / 二胡，弹拨琵琶，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "福建闽南民谣，琵琶轮指与竹笛，如《采茶舞曲》般灵动，羽调，木鱼与小锣轻点节奏，A 羽调。游戏配乐BGM，A 羽调，约 82 BPM，主奏竹笛 / 二胡，弹拨琵琶，纯器乐无人声，打击乐木鱼、小锣（灵动），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 8,
+    "name": "信天游",
+    "opera": "陕北",
+    "key": "D 羽调",
+    "bpm": 62,
+    "lead": "唢呐 / 板胡",
+    "pluck": "三弦",
+    "loop": 71.84,
+    "calm": "game/public/assets/music/xintianyou_calm.ogg",
+    "fight": "game/public/assets/music/xintianyou_fight.ogg",
+    "prompt": "陕北信天游，唢呐低吟高亢的长音，音域宽、大跳，节奏自由舒展，如黄土高原上的呼喊，D 羽调。游戏配乐BGM，D 羽调，约 62 BPM，主奏唢呐 / 板胡，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "陕北信天游，唢呐低吟高亢的长音，音域宽、大跳，节奏自由舒展，如黄土高原上的呼喊，D 羽调。游戏配乐BGM，D 羽调，约 62 BPM，主奏唢呐 / 板胡，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "陕北信天游，唢呐低吟高亢的长音，音域宽、大跳，节奏自由舒展，如黄土高原上的呼喊，D 羽调，鼓点极简。游戏配乐BGM，D 羽调，约 62 BPM，主奏唢呐 / 板胡，弹拨三弦，纯器乐无人声，打击乐大鼓、大锣（极简、大跳长音），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 9,
+    "name": "江南小调",
+    "opera": "江南",
+    "key": "D 宫五声",
+    "bpm": 76,
+    "lead": "竹笛 / 二胡",
+    "pluck": "古筝",
+    "loop": 66.76,
+    "calm": "game/public/assets/music/jiangnan_calm.ogg",
+    "fight": "game/public/assets/music/jiangnan_fight.ogg",
+    "prompt": "江南丝竹小调，如《茉莉花》般柔美，竹笛和古筝琵琶，水乡的轻盈与烟雨，D 宫五声调，节奏舒缓。游戏配乐BGM，D 宫五声，约 76 BPM，主奏竹笛 / 二胡，弹拨古筝，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "江南丝竹小调，如《茉莉花》般柔美，竹笛和古筝琵琶，水乡的轻盈与烟雨，D 宫五声调，节奏舒缓。游戏配乐BGM，D 宫五声，约 76 BPM，主奏竹笛 / 二胡，弹拨古筝，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "江南丝竹小调，如《茉莉花》般柔美，竹笛和古筝琵琶，水乡的轻盈与烟雨，D 宫五声调，节奏舒缓。游戏配乐BGM，D 宫五声，约 76 BPM，主奏竹笛 / 二胡，弹拨古筝，纯器乐无人声，打击乐梆子、小锣（轻盈），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  },
+  {
+    "no": 10,
+    "name": "二人转",
+    "opera": "东北",
+    "key": "A 宫五声",
+    "bpm": 116,
+    "lead": "唢呐 / 唢呐",
+    "pluck": "三弦",
+    "loop": 72.74,
+    "calm": "game/public/assets/music/errenzhuan_calm.ogg",
+    "fight": "game/public/assets/music/errenzhuan_fight.ogg",
+    "prompt": "东北二人转，唢呐与板胡对答，欢快泼辣，手绢翻飞般的热闹，A 宫五声调。游戏配乐BGM，A 宫五声，约 116 BPM，主奏唢呐 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_calm": "东北二人转，唢呐与板胡对答，欢快泼辣，手绢翻飞般的热闹，A 宫五声调。游戏配乐BGM，A 宫五声，约 116 BPM，主奏唢呐 / 唢呐，弹拨三弦，纯器乐无人声，舒缓层：旋律抒情，配器极稀疏，只有拉弦与弹拨的长音，完全不要鼓点、不要锣鼓、不要任何打击乐与节奏敲击，安静飘逸，可无缝循环，无淡入淡出，不要环境音效",
+    "prompt_fight": "东北二人转，唢呐与板胡对答，欢快泼辣，节奏强烈的「咚恰」两拍子，手绢翻飞般的热闹，A 宫五声调。游戏配乐BGM，A 宫五声，约 116 BPM，主奏唢呐 / 唢呐，弹拨三弦，纯器乐无人声，打击乐大鼓、钹（咚恰两拍子），紧张层：大鼓与板鼓每拍重击，大锣小锣密集催打，钹与梆子急促加花，锣鼓经贯穿全曲并处于最前景，紧迫压迫、战意不屈，同调同小节数，可无缝循环，无淡入淡出，不要环境音效"
+  }
+];
+const ctx = new (window.AudioContext||window.webkitAudioContext)();
+const buffers = {};
+async function load(url){
+  if(buffers[url]) return buffers[url];
+  const r = await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status);
+  buffers[url] = await ctx.decodeAudioData(await r.arrayBuffer());
+  return buffers[url];
+}
+let current = null;
+async function play(t){
+  if(ctx.state==='suspended') await ctx.resume();
+  if(current) current.stop();
+  const c = t.calm ? await load(t.calm) : null;
+  const f = t.fight ? await load(t.fight) : null;
+  const dur = t.loop || ((c||f).duration);
+  const gc = ctx.createGain(), gf = ctx.createGain();
+  gc.gain.value = 1; gf.gain.value = 0;
+  gc.connect(ctx.destination); gf.connect(ctx.destination);
+  const mk = (buf,g)=>{ const s=ctx.createBufferSource(); s.buffer=buf; s.loop=true;
+    s.loopStart=0; s.loopEnd=dur; s.connect(g); s.start(0,0); return s; };
+  const s1 = c?mk(c,gc):null, s2 = f?mk(f,gf):null;
+  current = { stop(){ try{s1&&s1.stop()}catch(e){} try{s2&&s2.stop()}catch(e){}
+                       gc.disconnect(); gf.disconnect(); }, gc, gf };
+  return current;
+}
+function stop(){ if(current){current.stop(); current=null;} }
+const box = document.getElementById('list');
+document.getElementById('stat').textContent =
+  `${TRACKS.length} 首 / ${TRACKS.filter(t=>t.fight).length} 组双层，均已通过 -16 LUFS 与无缝循环验收`;
+TRACKS.forEach(t=>{
+  const d=document.createElement('div'); d.className='card';
+  d.innerHTML = `<div class="row"><span class="no">#${t.no}</span><span class="name">${t.name}</span>
+    <span class="opera">${t.opera}</span></div>
+    <div class="meta">${t.key} · ${t.bpm} BPM · 主奏 ${t.lead} · 弹拨 ${t.pluck} · 循环 ${Number(t.loop).toFixed(2)}s</div>
+    <div class="ctl"><button class="play">▶ 播放</button><button class="stopb">■ 停止</button>
+    <span class="lab">平静 ← 交战</span><input type="range" min="0" max="1" step="0.01" value="0" ${t.fight?'':'disabled'}>
+    <span class="lab val">0.00</span><span class="empty">${t.fight?'':'（未生成交战层）'}</span></div>
+    <div class="err"></div>
+    <details class="note"><summary>查看生成提示词（平静 / 交战）</summary>
+      <div><b>平静层</b>　${t.prompt_calm||t.prompt||''}</div>
+      <div><b>交战层</b>　${t.prompt_fight||''}</div></details>`;
+  const sl=d.querySelector('input'), val=d.querySelector('.val');
+  d.querySelector('.play').onclick=async e=>{
+    e.target.classList.add('on'); e.target.textContent='◉ 播放中';
+    try{ const c=await play(t); const v=parseFloat(sl.value);
+      c.gc.gain.value=Math.cos(v*Math.PI/2); c.gf.gain.value=Math.sin(v*Math.PI/2);
+    }catch(err){ d.querySelector('.err').innerHTML='<span class="warn" style="display:block;margin:10px 0 0">加载失败：'+err.message+'（请用本地 HTTP 服务打开本页）</span>'; }
+    e.target.classList.remove('on'); e.target.textContent='▶ 播放';
+  };
+  d.querySelector('.stopb').onclick=()=>stop();
+  sl.oninput=()=>{ const v=parseFloat(sl.value); val.textContent=v.toFixed(2);
+    if(current){ current.gc.gain.setTargetAtTime(Math.cos(v*Math.PI/2),ctx.currentTime,.04);
+                 current.gf.gain.setTargetAtTime(Math.sin(v*Math.PI/2),ctx.currentTime,.04); } };
+  box.appendChild(d);
+});
+</script></body></html>

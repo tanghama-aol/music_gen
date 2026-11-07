@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人声唱腔测试曲 · 西皮流水</title>
+<style>
+:root{--bg:#111318;--panel:#191c23;--line:#2a2f3a;--txt:#e8eaf0;--dim:#8b93a5;--acc:#e0a35a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);
+ font:14px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;padding:28px}
+.wrap{max-width:820px;margin:auto}h1{font-size:20px;margin:0 0 4px}
+h2{font-size:14px;font-weight:500;margin:26px 0 10px;color:var(--acc)}
+p.sub{color:var(--dim);margin:0 0 22px;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+ padding:16px 18px;margin-bottom:12px}
+audio{width:100%;margin-top:8px}code{color:var(--acc);font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td{padding:8px 6px;border-bottom:1px solid var(--line);color:var(--dim)}
+td.v{color:var(--txt);white-space:nowrap}td.d{font-size:12px}
+.note{color:var(--dim);font-size:12px;margin-top:10px}
+pre{background:#101218;border:1px solid var(--line);border-radius:8px;padding:12px;
+ font-size:12px;color:var(--txt);overflow-x:auto}
+</style></head><body><div class="wrap">
+<h1>人声唱腔测试曲 · 西皮流水</h1>
+<p class="sub">ACE-Step 1.5 音乐生成大模型 · 器乐为主，中段插入一段风格化戏曲女声唱腔 · 单曲测试，未写入正式 manifest</p>
+<div class="card"><h2 style="margin-top:0">成品 · 无缝循环</h2>
+<audio controls loop src="game/public/assets/music/test_vocal_xipi.ogg"></audio>
+<div class="note">44.1 kHz 立体声 OGG Vorbis · −16 LUFS · 循环 86.60s。开头与结尾都是器乐，唱腔只在中间出现。</div></div>
+<div class="note">结构：<code>A 器乐 → B 唱腔 → A 器乐</code>，三段 2 s 等功率交叉淡化；
+开头与结尾都是器乐，唱腔只在中间一段出现。</div></div>
+<h2>A / B 对照试听</h2>
+<div class="card"><b>段 A · 纯器乐</b> <code>[Instrumental]</code>
+<audio controls src="tmp/vocal_test_inst.mp3"></audio></div>
+<div class="card"><b>段 B · 带唱腔</b> <code>同 seed，仅 lyrics 不同</code>
+<audio controls src="tmp/vocal_test_vocal.mp3"></audio></div>
+<h2>0–4 kHz 频谱对照</h2>
+<div class="card"><b>段 A · 静态谐波列、稀疏短促起音</b>
+<img style="width:100%;display:block;margin-top:8px;border-radius:6px"
+ src="tmp/spec4k_inst.png" alt="段 A 频谱"></div>
+<div class="card"><b>段 B · 谐波列同步跳进 + 持续音规则颤音 + 装饰性音头</b>
+<img style="width:100%;display:block;margin-top:8px;border-radius:6px"
+ src="tmp/spec4k_vocal.png" alt="段 B 频谱"></div>
+<h2>客观对照</h2>
+<div class="card"><table><tr><td>波形相关系数</td><td class=v>0.019</td><td class=d>越低说明 lyrics 改动越大</td></tr>
+<tr><td>上谐波峰值 2–4k / 0.3–1k</td><td class=v>0.046 → 0.124</td><td class=d>器乐段 → 唱腔段，局部抬升即唱腔乐句</td></tr>
+<tr><td>1–4 kHz 能量占比</td><td class=v>0.363 → 0.285</td><td class=d>全段平均，长拖腔下反而可能下降</td></tr>
+<tr><td>音节调制 3–10 Hz</td><td class=v>0.218 → 0.027</td><td class=d>「啊——」式长拖腔音节率天然偏低，仅作参考</td></tr>
+<tr><td>有效片段长度</td><td class=v>31.08 s / 31.12 s</td><td class=d>A / B，已去掉模型静音尾；共修补 11 处咔哒</td></tr>
+<tr><td>成品循环点</td><td class=v>86.60 s</td><td class=d>平滑边界搜索 + 首尾 2 s 等功率交叉淡化</td></tr></table>
+<div class="note">两段 caption / seed / BPM / 时长 / steps 完全一致，唯一差别是 lyrics。
+波形相关降到 0.019，且 B 段在 19–23 s / 29–32 s 出现上谐波能量的局部暴涨，
+配合频谱图里整组谐波同步跳进与颤音，说明模型确实走了唱腔分支。CPU 4-step 的量化推理音色偏合成感，
+指标只作参考，请以上面试听为准。</div></div>
+<h2>本次 lyrics（段 B）</h2>
+<div class="card"><pre>[inst]<br>[verse]<br>云开月照古城楼<br>一嗓西皮绕画梁<br>[chorus]<br>啊—— 啊——<br>[inst]</pre>
+<div class="note">唱词为自编风格化短句，未使用任何现存剧目唱词。<code>[inst]</code> 让首尾回到纯器乐，<code>[verse]</code> / <code>[chorus]</code> 是唱腔段。</div></div>
+<h2>caption</h2>
+<div class="card"><pre>Beijing opera xipi liushui, jinghu erhu lead with sparse pipa plucks, D zhi pentatonic mode, 98 BPM, cinematic Chinese opera game BGM, sparse airy arrangement, classic Chinese opera atmosphere with an optional brief expressive female opera vocal phrase and melismatic drawn-out singing, mostly instrumental, no drums, no percussion, no gongs, no ambient sound effects, steady tempo, no tempo change, seamless loop</pre></div>
+<p class="note">生成脚本：<code>gen_vocal_test.py</code> · 指标明细：<code>tmp/vocal_test_report.json</code>。
+本测试曲不进入 <code>manifest.json</code>，需要正式收录时再手动加条目。</p>
+</div></body></html>
